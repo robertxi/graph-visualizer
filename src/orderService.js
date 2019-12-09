@@ -18,38 +18,47 @@ const orderService = {};
 orderService.orderNodes = (nodes)=> {
   if(!nodes) return;
   let root;
+  let nodeMap = {};
   nodes.forEach((node) => {
     if(node.isRoot) root = node
+    nodeMap[node.id] = node;
   })
   if(!root) return;
-  const orderedNodes = bfsAndOrder(root);
+  const orderedNodes = bfsAndOrder(root, nodeMap);
   return orderedNodes
 }
 
-const bfsAndOrder = (root) => {
+const bfsAndOrder = (root, nodeMap) => {
   root.index = 0
   const orderedNodes = [[root]]
   const bfsQueue = []
-  root.children.forEach((node) => bfsQueue.push(node))
+  root.children.forEach((nodeId) => {
+    bfsQueue.push(nodeMap[nodeId])
+  })
 
   while(bfsQueue.length > 0) {
     let node = bfsQueue.shift()
-    node.index = getInsertionIndex(node)
+    node.index = getInsertionIndex(node, nodeMap)
     insertNode(node, orderedNodes)
-    moveChildrenBack(node, orderedNodes)
-    node.children.forEach((c) => {bfsQueue.push(c)})
+    moveChildrenBack(node, orderedNodes, nodeMap)
+    node.children.forEach((childId) => {bfsQueue.push(nodeMap[childId])})
   }
   return orderedNodes;
 }
 
-const getInsertionIndex = (node) => {
+const getInsertionIndex = (node, nodeMap) => {
   let largestIndex = 0;
-  node.parents.forEach((n) => n.index && n.index > largestIndex ? largestIndex = n.index : void 0);
+  node.parents.forEach((nodeId) => {
+      let n = nodeMap[nodeId]
+      n.index && n.index > largestIndex ? largestIndex = n.index : void 0;
+    }
+  );
   return largestIndex + 1;
 }
 
-const moveChildrenBack = (node, orderedNodes) => {
-  node.children.forEach((c) => {
+const moveChildrenBack = (node, orderedNodes, nodeMap) => {
+  node.children.forEach((childId) => {
+    let c = nodeMap[childId];
     if(c.index && c.index < node.index){
       removeNode(c, orderedNodes)
       c.index = node.index + 1 //children go 1 index behind parent
