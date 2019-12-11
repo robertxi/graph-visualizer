@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 
 const getElement = (id) => {
   return document.getElementById(id)
@@ -10,32 +10,25 @@ const getCenter = (element) => {
 const EdgeComponent = ({edge}) => {
   let [cx, cy] = getCenter(getElement(edge.child))
   let [px, py] = getCenter(getElement(edge.parent))
+  //line offset to end on edges of nodes
   cy -=26
   py +=26
 
   // mid-point of line:
-  let mpx = (px + cx) * 0.5;
+  // let mpx = (px + cx) * 0.5;
   let mpy = (py + cy) * 0.5;
 
-  // angle of perpendicular to line:
-  let theta = Math.atan2(py - cy, px - cx) - Math.PI / 2;
+  // location of control points: bezier
+  const ct1x = cx
+  const ct1y = mpy
+  const ct2x = px
+  const ct2y = mpy
 
-  let offset = cx <= px ? cx == px? 0 : 20 : -20;
+  // construct the command to draw a curveto bezier curve
+  const curve = `M${cx} ${cy} C ${ct1x} ${ct1y} ${ct2x} ${ct2y} ${px} ${py}`
 
-  // location of control point:
-  var ct1x = mpx + offset * Math.cos(theta);
-  var ct1y = mpy + offset * Math.sin(theta);
-
-  // construct the command to draw a quadratic curve
-  var curve = "M" + cx + " " + cy + " Q " + ct1x + " " + ct1y + " " + px + " " + py;
-
-  const lineStyle = {
-    stroke:"black",
-    strokeWidth:2
-  }
   return (
     <path d={curve}stroke="black" strokeWidth="4" strokeLinecap="round" fill="transparent" />
-    // <line x1={cx} y1={cy} x2={px} y2={py} style={lineStyle}/>
   )
 }
 
