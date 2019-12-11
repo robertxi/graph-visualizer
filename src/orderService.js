@@ -25,7 +25,7 @@ orderService.orderNodes = (nodes)=> {
   })
   if(!root) return;
   const orderedNodes = bfsAndOrder(root, nodeMap);
-  return orderedNodes
+  return [orderedNodes, nodeMap]
 }
 
 const bfsAndOrder = (root, nodeMap) => {

@@ -7,6 +7,48 @@ import GraphComponent from './GraphComponent';
 
 
 const settings = {
+  edges: [
+    {
+      id: 1, 
+      child: 2, 
+      parent: 1
+    },
+    {
+      id: 2, 
+      child: 3, 
+      parent: 1
+    },
+    {
+      id: 3, 
+      child: 7, 
+      parent: 1
+    },
+    {
+      id: 4, 
+      child: 4, 
+      parent: 3
+    },
+    {
+      id: 5, 
+      child: 5, 
+      parent: 3
+    },
+    {
+      id: 6, 
+      child: 2, 
+      parent: 4
+    },
+    {
+      id: 7, 
+      child: 6, 
+      parent: 4
+    },
+    {
+      id: 8,
+      child: 8,
+      parent: 7
+    }
+  ], 
   nodes: [
     {
       id: 1,
@@ -56,12 +98,19 @@ const settings = {
       name: "seven",
       value: "seven",
       parents: [1],
+      children: [8],
+    },
+    {
+      id: 8,
+      name: "eight",
+      value: "eight",
+      parents: [7],
       children: [],
     }
   ]
 }
 
-ReactDOM.render(<GraphComponent nodes={settings.nodes}/>, document.getElementById('root'));
+ReactDOM.render(<GraphComponent nodes={settings.nodes} edges={settings.edges}/>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

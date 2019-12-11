@@ -1,12 +1,13 @@
 import React from 'react'
+import NodeComponent from './NodeComponent';
 
 const NodeRow = ({nodes}) => {
 
   return (
-    <div>
+    <div className="node-row">
     {
       nodes.map((node)=>{
-        return <span key={node.id}>{node.value}</span>
+        return <NodeComponent key={node.id} node={node}/>
       })
     }
     </div>
